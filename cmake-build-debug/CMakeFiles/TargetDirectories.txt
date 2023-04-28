@@ -1,0 +1,3 @@
+/Users/averydrennan/CLionProjects/cloth_sim/cmake-build-debug/CMakeFiles/cloth_sim.dir
+/Users/averydrennan/CLionProjects/cloth_sim/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/averydrennan/CLionProjects/cloth_sim/cmake-build-debug/CMakeFiles/rebuild_cache.dir
