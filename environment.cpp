@@ -14,6 +14,7 @@ void environment::env_init(char* title,int window_width, int window_height)
         printf("Error: %s\n",SDL_GetError());
     }
 
+
     window = SDL_CreateWindow(title,SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,
     window_width,window_height,SDL_WINDOW_SHOWN);
 
@@ -31,6 +32,9 @@ void environment::env_init(char* title,int window_width, int window_height)
 
     this->fps_manager = static_cast<FPSmanager *>(malloc(sizeof(*fps_manager)));
     SDL_setFramerate(this->fps_manager,100);
+
+    //sets background image
+    this->background = "/Users/averydrennan/CLionProjects/cloth_sim/background.bmp";
 
     //sets up the cloth
     int cloth_width = 300/cloth_spacing;
@@ -176,4 +180,10 @@ double environment::distance_mouse_point(point* point)
 {
     return sqrt(pow(event_data->mouse_pos.first - point->get_x(),2) +
                         pow(event_data->mouse_pos.second - point->get_y(),2));
+}
+
+void environment::render_background()
+{
+//     Load sample.png into image
+//    SDL_Surface* surface = IMG_Load(background.c_str());
 }

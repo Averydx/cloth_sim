@@ -30,7 +30,7 @@ public:
     point* get_p1();
 
 
-
+    bool is_loose;
 };
 
 

@@ -7,12 +7,14 @@
 #include <SDL.h>
 #include <cloth.h>
 #include <SDL2_framerate.h>
+#include <string>
 
 
 typedef class environment {
 SDL_Window* window;
 SDL_Renderer* renderer;
 FPSmanager* fps_manager;
+std::string background;
 
 cloth* cloth;
 
@@ -57,6 +59,9 @@ private:
 
     //calculate delta_time
     double calc_dt();
+
+    //renders the background
+    void render_background();
 
     ~environment();
 
