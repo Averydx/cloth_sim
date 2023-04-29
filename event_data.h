@@ -12,8 +12,8 @@ struct event_data{
     std::pair<double,double> mouse_pos;
     bool left_click;
     bool right_click;
+    bool wire_frame;
     event_data();
-    void set_mouse_pos(double x, double y);
 
 };
 

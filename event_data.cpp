@@ -10,6 +10,6 @@ event_data::event_data() {
         mouse_pos = std::make_pair(0.f,0.f);
         right_click = false;
         left_click = false;
+        wire_frame = false;
 
 }
-

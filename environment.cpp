@@ -39,7 +39,7 @@ void environment::env_init(char* title,int window_width, int window_height)
     int start_x = window_width * 0.5f - cloth_width * cloth_spacing * 0.5f;
     int start_y = window_height * 0.1f;
 
-    this->cloth = new class cloth(cloth_height,cloth_width,
+    this->cloth = new class cloth(cloth_width,cloth_height,
             cloth_spacing,start_x,start_y);
 
     this->last_update_time = SDL_GetTicks();
@@ -72,6 +72,17 @@ void environment::event_handler(SDL_Event &event)
             this->event_data->close = true;
         }
 
+        else if(event.type == SDL_KEYDOWN)
+        {
+            if(event.key.keysym.sym == SDLK_m)
+            {
+                if(!event_data->wire_frame)
+                    this->event_data->wire_frame = true;
+                else
+                    this->event_data->wire_frame = false;
+
+            }
+        }
 
         else if(event.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -120,11 +131,11 @@ void environment::event_handler(SDL_Event &event)
 
 void environment::render()
 {
-    SDL_SetRenderDrawColor(this->renderer,0xFF,0xFF,0xFF,SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(this->renderer,0x0,0x0,0x0,SDL_ALPHA_OPAQUE);
     SDL_RenderSetViewport(this->renderer,nullptr);
     SDL_RenderClear(this->renderer);
 
-    this->cloth->render(renderer);
+    this->cloth->render(renderer,this->event_data->wire_frame);
 
     SDL_RenderPresent(renderer);
 }

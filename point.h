@@ -5,6 +5,7 @@
 #ifndef CLOTH_SIM_POINT_H
 #define CLOTH_SIM_POINT_H
 #include <utility>
+#include <vector>
 #include "stick.h"
 
 
@@ -17,10 +18,12 @@ private:
     std::pair<double,double> old_pos;
     std::pair<double,double> init_pos;
 
+
     bool is_pinned;
 
 public:
     std::pair<stick*,stick*> sticks;
+    std::vector<point*> neighbors;
     point(double x, double y);
     [[nodiscard]] double get_x() const;
     [[nodiscard]] double get_y() const;

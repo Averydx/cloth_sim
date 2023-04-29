@@ -9,6 +9,11 @@ cloth::cloth(int cloth_width, int cloth_height, int cloth_spacing,int start_x,in
     this->wind = std::make_pair<double,double>(25.f,0.f);
     this->drag = 0.01f;
     this->elasticity = 10.0f;
+    this->cloth_width = cloth_width;
+    this->cloth_height = cloth_height;
+    this->start_x = start_x;
+    this->start_y = start_y;
+    this->cloth_spacing = cloth_spacing;
 
     for(int y = 0; y <= cloth_height; y++)
     {
@@ -48,24 +53,37 @@ cloth::cloth(int cloth_width, int cloth_height, int cloth_spacing,int start_x,in
     }
 
 
+    instantiate_neighbors();
+
 
 }
 
 
-void cloth::render(SDL_Renderer* renderer)
+void cloth::render(SDL_Renderer* renderer,bool wire_frame)
 {
+
+    texture_renderer(renderer);
+
     for(auto stick : sticks)
     {
-        if(stick->active()) {
+        if(stick->active() && wire_frame) {
             if (stick->highlighted())
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_TRANSPARENT);
             else
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_TRANSPARENT);
 
             SDL_RenderDrawLine(renderer, stick->get_p0()->get_x(), stick->get_p0()->get_y(),
                                stick->get_p1()->get_x(), stick->get_p1()->get_y());
         }
-    }
+
+        else if(!stick->active() && wire_frame)
+        {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_TRANSPARENT);
+            SDL_RenderDrawLine(renderer, stick->get_p0()->get_x(), stick->get_p0()->get_y(),
+                               stick->get_p1()->get_x(), stick->get_p1()->get_y());
+
+        }
+   }
 
 }
 
@@ -91,4 +109,76 @@ void cloth::update(double delta_time) {
 
 
 
+}
+
+void cloth::instantiate_neighbors()
+{
+
+    for(int i = 0; i < points.size();i++)
+    {
+        if(points[i]->get_x() == (start_x + cloth_width * cloth_spacing) ||
+        points[i]->get_y() == (start_y + cloth_height * cloth_spacing))
+        {
+            //do nothing
+        }
+
+        else
+        {
+            points[i]->neighbors.push_back(points[i+1]);
+            points[i]->neighbors.push_back(points[i+cloth_width + 1]);
+            points[i]->neighbors.push_back(points[i+cloth_width + 2]);
+        }
+    }
+}
+
+void cloth::texture_renderer(SDL_Renderer* renderer)
+{
+    for(auto point: points)
+    {
+        if(point->sticks.first->active() && point->sticks.second->active())
+        {
+            if (!point->neighbors.empty()) {
+                const std::vector<SDL_Vertex> vertices_1 =
+                        {
+                                {SDL_FPoint{static_cast<float>(point->get_x()), static_cast<float>(point->get_y())},
+                                                                                                  SDL_Color{0, 0, 255,
+                                                                                                            SDL_ALPHA_TRANSPARENT}, SDL_FPoint{
+                                        0},},
+                                {SDL_FPoint{static_cast<float>(point->neighbors.at(0)->get_x()),
+                                            static_cast<float>(point->neighbors.at(0)->get_y())}, SDL_Color{0, 0, 255,
+                                                                                                            SDL_ALPHA_TRANSPARENT}, SDL_FPoint{
+                                        0},},
+                                {SDL_FPoint{static_cast<float>(point->neighbors.at(1)->get_x()),
+                                            static_cast<float>(point->neighbors.at(1)->get_y())}, SDL_Color{0, 0, 255,
+                                                                                                            SDL_ALPHA_TRANSPARENT}, SDL_FPoint{
+                                        0},}
+                        };
+
+                if(point->sticks.first->active() && point->sticks.second->active()) {
+                    SDL_RenderGeometry(renderer, nullptr, vertices_1.data(), vertices_1.size(), nullptr, 0);
+
+                }
+                const std::vector<SDL_Vertex> vertices_2 =
+                        {
+                                {SDL_FPoint{static_cast<float>(point->neighbors.at(2)->get_x()),
+                                            static_cast<float>(point->neighbors.at(2)->get_y())},
+                                                                                                  SDL_Color{0, 0, 255,
+                                                                                                            SDL_ALPHA_TRANSPARENT}, SDL_FPoint{
+                                        0},},
+                                {SDL_FPoint{static_cast<float>(point->neighbors.at(0)->get_x()),
+                                            static_cast<float>(point->neighbors.at(0)->get_y())}, SDL_Color{0, 0, 255,
+                                                                                                            SDL_ALPHA_TRANSPARENT}, SDL_FPoint{
+                                        0},},
+                                {SDL_FPoint{static_cast<float>(point->neighbors.at(1)->get_x()),
+                                            static_cast<float>(point->neighbors.at(1)->get_y())}, SDL_Color{0, 0, 255,
+                                                                                                            SDL_ALPHA_TRANSPARENT}, SDL_FPoint{
+                                        0},}
+                        };
+            if(point->neighbors.at(2)->sticks.first->active() && point->neighbors.at(2)->sticks.second->active())
+                SDL_RenderGeometry(renderer, nullptr, vertices_2.data(), vertices_2.size(), nullptr, 0);
+
+
+            }
+        }
+    }
 }

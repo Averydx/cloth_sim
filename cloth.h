@@ -16,13 +16,20 @@ private:
     std::pair<double,double> wind;
     double drag;
     double elasticity;
+    int cloth_width;
+    int cloth_height;
+    int start_x;
+    int start_y;
+    int cloth_spacing;
+    void texture_renderer(SDL_Renderer* renderer);
 
 public:
     std::vector<point*> points{};
     std::vector<stick*> sticks{};
     cloth(int cloth_width, int cloth_height, int cloth_spacing,int start_x,int start_y);
-    void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer,bool wire_frame);
     void update(double delta_time);
+    void instantiate_neighbors();
     ~cloth() = default;
 };
 
