@@ -130,6 +130,18 @@ void environment::event_handler(SDL_Event &event)
                 }
             }
         }
+
+        else if(event_data->right_click && event.type == SDL_MOUSEMOTION)
+        {
+            printf("(%f,%f)\n",event_data->mouse_pos.first,event_data->mouse_pos.second);
+            for(auto point: cloth->points)
+            {
+                if(distance_mouse_point(point) < 20)
+                {
+                    apply_mouse_force(point);
+                }
+            }
+        }
     }
 }
 
@@ -170,10 +182,16 @@ double environment::calc_dt() {
 
 void environment::mouse_pos()
 {
+    this->event_data->mouse_prev_pos.first = this->event_data->mouse_pos.first;
+    this->event_data->mouse_prev_pos.second = this->event_data->mouse_pos.second;
+
     int x,y;
     SDL_GetMouseState((&x), (&y));
     this->event_data->mouse_pos.first = x;
     this->event_data->mouse_pos.second = y;
+
+
+
 }
 
 double environment::distance_mouse_point(point* point)
@@ -186,4 +204,20 @@ void environment::render_background()
 {
 //     Load sample.png into image
 //    SDL_Surface* surface = IMG_Load(background.c_str());
+}
+
+void environment::apply_mouse_force(point* point) {
+
+
+    double difference_x = event_data->mouse_pos.first - event_data->mouse_prev_pos.first;
+    double difference_y = event_data->mouse_pos.second - event_data->mouse_prev_pos.second;
+
+    if (difference_x > cloth->elasticity) difference_x = cloth->elasticity;
+    if (difference_y > cloth->elasticity) difference_y = cloth->elasticity;
+    if (difference_x < -cloth->elasticity) difference_x = -1 * cloth->elasticity;
+    if (difference_y < -cloth->elasticity) difference_y = -1* cloth->elasticity;
+
+    point->old_pos.first = point->get_x() - difference_x;
+    point->old_pos.second = point->get_y() - difference_y;
+
 }

@@ -15,7 +15,6 @@ private:
     std::pair<double,double> gravity;
     std::pair<double,double> wind;
     double drag;
-    double elasticity;
     int cloth_width;
     int cloth_height;
     int start_x;
@@ -31,6 +30,8 @@ public:
     void update(double delta_time);
     void instantiate_neighbors();
     ~cloth() = default;
+
+    double elasticity;
 };
 
 

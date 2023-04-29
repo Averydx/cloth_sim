@@ -20,7 +20,6 @@ cloth::cloth(int cloth_width, int cloth_height, int cloth_spacing,int start_x,in
         for(int x = 0; x <= cloth_width; x++)
         {
             auto* point = new class point(start_x + x * cloth_spacing, start_y + y * cloth_spacing);
-
             if(x!=0)
             {
                 auto* left_point = points[this->points.size()-1];
@@ -39,8 +38,9 @@ cloth::cloth(int cloth_width, int cloth_height, int cloth_spacing,int start_x,in
                 sticks.push_back(s);
             }
 
-            if(x % 2 == 0 && y ==0)
+            if(y % 2 == 0 && x ==0 || y % 2 == 0 && x ==cloth_width)
                 point->pin();
+
 
             points.push_back(point);
 

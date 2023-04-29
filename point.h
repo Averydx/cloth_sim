@@ -12,18 +12,16 @@
 class stick;
 class point {
 
-private:
+public:
 
     std::pair<double,double> pos;
     std::pair<double,double> old_pos;
     std::pair<double,double> init_pos;
-
-
     bool is_pinned;
-
-public:
     std::pair<stick*,stick*> sticks;
     std::vector<point*> neighbors;
+
+
     point(double x, double y);
     [[nodiscard]] double get_x() const;
     [[nodiscard]] double get_y() const;

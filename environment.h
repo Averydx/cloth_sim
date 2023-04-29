@@ -46,6 +46,10 @@ public:
     //finds the distance between mouse and point
     double distance_mouse_point(point* point);
 
+    //applies force in mouse direction to selected sticks
+    void apply_mouse_force(point* point);
+
+
 
 private:
     //handles all events each frame

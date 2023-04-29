@@ -12,6 +12,7 @@ class point;
 class stick {
 private:
     bool is_highlighted;
+    bool is_selected;
     bool is_active;
     point* p0;
     point* p1;

@@ -10,6 +10,7 @@ struct event_data{
 
     bool close;
     std::pair<double,double> mouse_pos;
+    std::pair<double,double> mouse_prev_pos;
     bool left_click;
     bool right_click;
     bool wire_frame;
